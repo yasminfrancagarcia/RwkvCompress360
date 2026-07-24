@@ -36,10 +36,20 @@ def compute_psnr(a, b):
 def compute_msssim_db(a, b):
     return -10 * math.log10(1 - ms_ssim(a, b, data_range=1.0).item())
 
+def compute_ws_psnr(a, b):
+    # a, b: tensores (1, C, H, W) da imagem erp original e reconstruída
+    H = a.size(2)
+    lat = torch.linspace(-math.pi/2, math.pi/2, H, device=a.device)
+    weights = torch.cos(lat).view(1, 1, H, 1)          # peso ~ área real na esfera
+    weights = weights / weights.mean()                   # normaliza
+    mse = (weights * (a - b) ** 2).mean().item()
+    return -10 * math.log10(mse)
+
 
 img_metrics = {
     "psnr": compute_psnr,
     "ms-ssim-db": compute_msssim_db,
+    "ws-psnr": compute_ws_psnr
 }
 
 
