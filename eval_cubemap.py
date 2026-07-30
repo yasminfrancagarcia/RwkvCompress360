@@ -191,6 +191,7 @@ def setup_args():
     parser.add_argument("-o", "--output-dir", type=str, default="")
     parser.add_argument("-r", "--result", type=str, help="result file path")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose mode")
+    parser.add_argument("--face-size", type=int, default=512, help="tamanho de cada face do cubemap")
     return parser
 
 def main(argv):
